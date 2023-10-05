@@ -16,12 +16,16 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+#Set this to ON, for unit test target to be generated; and testing to be carried out
+option(ENABLE_TESTING "Enable a Unit Testing Build" ON)
+
 set(LIBRARY_NAME Library)
 set(EXECUTABLE_NAME Executable)
 
 #option(COMPILE_EXECUTABLE "Whether to compile the executable" OFF)
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 include(addGitSubmodule)
+include(docs)
 
 #if you want to use a library that is not Cmake in a Cmake project
 #add_git_submodule(external/json) 
@@ -31,7 +35,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     nlohmann_json
-    GIT_REPOSITORY https://github.com/nlohmann/nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json
     GIT_TAG v3.11.2
     GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(nlohmann_json)
@@ -46,7 +50,7 @@ FetchContent_MakeAvailable(fmt)
 FetchContent_Declare(
     spdlog
     GIT_REPOSITORY https://github.com/gabime/spdlog
-    GIT_TAG 1.12.0
+    GIT_TAG v1.12.0
     GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(spdlog)
 
@@ -69,6 +73,7 @@ add_subdirectory(configured)
 add_subdirectory(external)
 add_subdirectory(src)
 add_subdirectory(app)
+add_subdirectory(tests)
 
 #if(COMPILE_EXECUTABLE)
 #   add_subdirectory(app)
