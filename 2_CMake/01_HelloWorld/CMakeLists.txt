@@ -16,6 +16,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+#CPM requires the library to be a CMake project, as it uses Fetch command under the hood
+option(USE_CPM "Whether to use CPM" ON)
+
 #Set this to ON, for unit test target to be generated; and testing to be carried out
 option(ENABLE_TESTING "Enable a Unit Testing Build" ON)
 
@@ -55,40 +58,52 @@ if(ENABLE_LTO)
     include(LTO)
 endif()
 
-FetchContent_Declare(
-    nlohmann_json
-    GIT_REPOSITORY https://github.com/nlohmann/json
-    GIT_TAG v3.11.2
-    GIT_SHALLOW TRUE)
-FetchContent_MakeAvailable(nlohmann_json)
+if(USE_CPM)
+    message(STATUS "Using CPM")
+    include(CPM)
+    cpmaddpackage("gh:nlohmann/json#v3.11.2")
+    cpmaddpackage("gh:fmtlib/fmt#10.1.1")
+    cpmaddpackage("gh:gabime/spdlog#v1.12.0")
+    cpmaddpackage("gh:jarro2783/cxxopts#v3.1.1")
+    cpmaddpackage("gh:catchorg/Catch2#v2.13.9")
+else()
+    message(STATUS "Using FetchContent")
+    FetchContent_Declare(
+        nlohmann_json
+        GIT_REPOSITORY https://github.com/nlohmann/json
+        GIT_TAG v3.11.2
+        GIT_SHALLOW TRUE)
+    FetchContent_MakeAvailable(nlohmann_json)
 
-FetchContent_Declare(
-    fmt
-    GIT_REPOSITORY https://github.com/fmtlib/fmt
-    GIT_TAG 10.1.1
-    GIT_SHALLOW TRUE)
-FetchContent_MakeAvailable(fmt)
+    FetchContent_Declare(
+        fmt
+        GIT_REPOSITORY https://github.com/fmtlib/fmt
+        GIT_TAG 10.1.1
+        GIT_SHALLOW TRUE)
+    FetchContent_MakeAvailable(fmt)
 
-FetchContent_Declare(
-    spdlog
-    GIT_REPOSITORY https://github.com/gabime/spdlog
-    GIT_TAG v1.12.0
-    GIT_SHALLOW TRUE)
-FetchContent_MakeAvailable(spdlog)
+    FetchContent_Declare(
+        spdlog
+        GIT_REPOSITORY https://github.com/gabime/spdlog
+        GIT_TAG v1.12.0
+        GIT_SHALLOW TRUE)
+    FetchContent_MakeAvailable(spdlog)
 
-FetchContent_Declare(
-    cxxopts
-    GIT_REPOSITORY https://github.com/jarro2783/cxxopts
-    GIT_TAG v3.1.1
-    GIT_SHALLOW TRUE)
-FetchContent_MakeAvailable(cxxopts)
+    FetchContent_Declare(
+        cxxopts
+        GIT_REPOSITORY https://github.com/jarro2783/cxxopts
+        GIT_TAG v3.1.1
+        GIT_SHALLOW TRUE)
+    FetchContent_MakeAvailable(cxxopts)
 
-FetchContent_Declare(
-    Catch2
-    GIT_REPOSITORY https://github.com/catchorg/Catch2
-    GIT_TAG v2.13.9
-    GIT_SHALLOW TRUE)
-FetchContent_MakeAvailable(Catch2)
+    FetchContent_Declare(
+        Catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2
+        GIT_TAG v2.13.9
+        GIT_SHALLOW TRUE)
+    FetchContent_MakeAvailable(Catch2)
+
+endif()
 
 
 add_subdirectory(configured)
