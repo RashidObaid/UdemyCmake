@@ -19,6 +19,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 #Set this to ON, for unit test target to be generated; and testing to be carried out
 option(ENABLE_TESTING "Enable a Unit Testing Build" ON)
 
+option(ENABLE_WARNINGS "Enable Warnings" ON)
+option(ENABLE_WARNINGS_AS_ERRORS "Enable Warnings as Errors" OFF)
+#Run Warnings as Error would abort the compilation on 1 single Error
+
 set(LIBRARY_NAME Library)
 set(EXECUTABLE_NAME Executable)
 
@@ -32,6 +36,10 @@ include(docs)
 
 #if it is a Cmake project to be included in Cmake project
 include(FetchContent)
+
+if(ENABLE_WARNINGS)
+    include(warnings)
+endif()
 
 FetchContent_Declare(
     nlohmann_json

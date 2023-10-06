@@ -13,6 +13,8 @@ int main()
     std::cout << project_name << '\n';
     std::cout << project_version << '\n';
 
+    int i; //introducing compiler error/issue: unused variable (warning)
+
     std::cout << "JSON Lib version:"
         << NLOHMANN_JSON_VERSION_MAJOR << "."
         << NLOHMANN_JSON_VERSION_MINOR << "."

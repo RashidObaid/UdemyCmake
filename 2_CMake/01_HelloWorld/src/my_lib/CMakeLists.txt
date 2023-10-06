@@ -15,3 +15,10 @@ target_link_libraries(${LIBRARY_NAME} PUBLIC
     nlohmann_json::nlohmann_json
     fmt::fmt
     spdlog::spdlog)
+
+if(${ENABLE_WARNINGS})
+    target_set_warnings(
+        ${LIBRARY_NAME}
+        ${ENABLE_WARNINGS}
+        ${ENABLE_WARNINGS_AS_ERRORS})
+endif()
