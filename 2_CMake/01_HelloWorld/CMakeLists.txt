@@ -23,6 +23,11 @@ option(ENABLE_WARNINGS "Enable Warnings" ON)
 option(ENABLE_WARNINGS_AS_ERRORS "Enable Warnings as Errors" OFF)
 #Run Warnings as Error would abort the compilation on 1 single Error
 
+option(ENABLE_SANITIZE_ADDR "Enable ..." ON)
+option(ENABLE_SANITIZE_UNDEF "Enable ..." OFF)
+
+option(ENABLE_LTO "Enable ..." ON)
+
 set(LIBRARY_NAME Library)
 set(EXECUTABLE_NAME Executable)
 
@@ -39,6 +44,15 @@ include(FetchContent)
 
 if(ENABLE_WARNINGS)
     include(warnings)
+endif()
+
+if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
+    include(sanitizer)
+    add_sanitizer_flags()
+endif()
+
+if(ENABLE_LTO)
+    include(LTO)
 endif()
 
 FetchContent_Declare(

@@ -13,7 +13,9 @@ int main()
     std::cout << project_name << '\n';
     std::cout << project_version << '\n';
 
-    int i; //introducing compiler error/issue: unused variable (warning)
+    //int i; //introducing compiler error/issue: unused variable (warning)
+    //int x[2]; //no compiler warnnings here for memory allocation,etc
+    //x[2] = 1337;
 
     std::cout << "JSON Lib version:"
         << NLOHMANN_JSON_VERSION_MAJOR << "."
