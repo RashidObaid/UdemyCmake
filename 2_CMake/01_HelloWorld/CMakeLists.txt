@@ -16,8 +16,16 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+#Specify the Correct Sysroot (required for Error: 'wchar.h' File Not Found):
+#It's essential to set the correct sysroot so the compiler looks in the right places for header files. 
+#You should specify the macOS SDK path as your sysroot.
+set(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk)
+
+
 #CPM requires the library to be a CMake project, as it uses Fetch command under the hood
-option(USE_CPM "Whether to use CPM" ON)
+option(USE_CPM "Whether to use CPM" OFF)
+option(USE_CONAN "Whether to use Conan" ON)
+
 
 #Set this to ON, for unit test target to be generated; and testing to be carried out
 option(ENABLE_TESTING "Enable a Unit Testing Build" ON)
@@ -66,6 +74,14 @@ if(USE_CPM)
     cpmaddpackage("gh:gabime/spdlog#v1.12.0")
     cpmaddpackage("gh:jarro2783/cxxopts#v3.1.1")
     cpmaddpackage("gh:catchorg/Catch2#v2.13.9")
+elseif(USE_CONAN)
+    message(STATUS "Using Conan")
+    include(${CMAKE_BINARY_DIR}/conan_toolchain.cmake)
+    find_package(nlohmann_json REQUIRED)
+    find_package(fmt REQUIRED)
+    find_package(spdlog REQUIRED)
+    find_package(cxxopts REQUIRED)
+    find_package(Catch2 REQUIRED)
 else()
     message(STATUS "Using FetchContent")
     FetchContent_Declare(
