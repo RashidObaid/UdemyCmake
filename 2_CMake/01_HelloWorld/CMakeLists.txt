@@ -21,10 +21,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 #You should specify the macOS SDK path as your sysroot.
 set(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk)
 
+#Required for macOS support. vcpkg supports microsoft windows by default. 
+if(APPLE)
+    set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "Build architecture for macOS" FORCE)
+endif()
 
 #CPM requires the library to be a CMake project, as it uses Fetch command under the hood
 option(USE_CPM "Whether to use CPM" OFF)
-option(USE_CONAN "Whether to use Conan" ON)
+option(USE_CONAN "Whether to use Conan" OFF)
+option(USE_VCPKG "Whether to use VCPKG" ON)
 
 
 #Set this to ON, for unit test target to be generated; and testing to be carried out
@@ -82,6 +87,14 @@ elseif(USE_CONAN)
     find_package(spdlog REQUIRED)
     find_package(cxxopts REQUIRED)
     find_package(Catch2 REQUIRED)
+elseif(USE_VCPKG)
+    message(STATUS "Using VCPKG")
+    include(${CMAKE_SOURCE_DIR}/external/vcpkg/scripts/buildsystems/vcpkg.cmake)    
+    find_package(nlohmann_json CONFIG REQUIRED)
+    find_package(fmt CONFIG REQUIRED)
+    find_package(spdlog CONFIG REQUIRED)
+    find_package(cxxopts CONFIG REQUIRED)
+    find_package(Catch2 CONFIG REQUIRED)  
 else()
     message(STATUS "Using FetchContent")
     FetchContent_Declare(
